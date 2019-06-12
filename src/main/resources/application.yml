@@ -1,9 +1,14 @@
 server:
   port: 9001
-
 github:
   client:
     id: f50f7722eae27b232167
     secret: 398a717e496cc12e71b779b5a86920e101a284bd
   redirect:
     uri: http://localhost:9001/callback
+spring:
+  datasource:
+    password: 123456
+    username: root
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/springboot?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
