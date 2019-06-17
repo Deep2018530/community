@@ -54,4 +54,14 @@ public class QuestionService {
         }
         return questionDtos;
     }
+
+    /**
+     * @description 根据用户id查询问题
+     * @author DeepSleeping
+     * @date 2019/6/17 11:37
+     */
+    public List<Question> listQuestion(Integer id) {
+        List<Question> questions = questionMapper.listByUserId(id);
+        return questions;
+    }
 }

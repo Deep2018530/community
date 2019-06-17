@@ -43,3 +43,8 @@ PRIMARY KEY (`id`)
 ```bash
 mvn flyway:migrate
 ``` 
+
+### 问题
+> 添加拦截器后无法加载静态资源
+>> 通过查看源码发现，其实public,static,resources都是可以被加载读取的，不过当加了@EnableWebMvc注解后，会自动把所有的WebMvcConfigurer  
+的实现类集合赋值给 delegate,然后再轮询加载，所以自定义拦截器的时候要重写addRe..方法，来配置静态文件的位置。

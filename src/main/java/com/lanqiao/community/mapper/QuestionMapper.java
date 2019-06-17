@@ -3,7 +3,9 @@ package com.lanqiao.community.mapper;
 import com.lanqiao.community.model.Question;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -21,4 +23,7 @@ public interface QuestionMapper {
 
     @Select("select * from question")
     List<Question> list();
+
+    @Select("select * from question where creator = #{userId}")
+    List<Question> listByUserId(@Param("userId") Integer id);
 }
