@@ -62,6 +62,21 @@ public class QuestionService {
      */
     public List<Question> listQuestion(Integer id) {
         List<Question> questions = questionMapper.listByUserId(id);
+
         return questions;
+    }
+
+    /**
+     * @description 根据id查询问题
+     * @author DeepSleeping
+     * @date 2019/6/18 23:13
+     */
+    public QuestionDto getById(Integer id) {
+        Question question = questionMapper.getById(id);
+        QuestionDto questionDto = new QuestionDto();
+        BeanUtils.copyProperties(question, questionDto);
+        User user = userMapper.findById(questionDto.getCreator());
+        questionDto.setUser(user);
+        return questionDto;
     }
 }

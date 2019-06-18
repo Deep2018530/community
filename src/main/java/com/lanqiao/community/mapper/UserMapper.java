@@ -23,4 +23,10 @@ public interface UserMapper {
 
     @Delete("delete from user_1 where account_id = #{accountId}")
     void removeAll(User user);
+
+    @Select("select * from user_1 where account_id = #{accountId}")
+    User findByaccountId(@Param(value = "accountId") String accountId);
+
+    @Update("update user_1 set name = #{name},token = #{token},gmt_modified = #{gmtModified},avatar_url = #{avatarUrl} where account_id = #{accountId}")
+    void update(User user);
 }

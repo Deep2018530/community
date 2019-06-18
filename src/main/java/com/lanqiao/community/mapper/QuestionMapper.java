@@ -26,4 +26,7 @@ public interface QuestionMapper {
 
     @Select("select * from question where creator = #{userId}")
     List<Question> listByUserId(@Param("userId") Integer id);
+
+    @Select("select * from question where id = #{id}")
+    Question getById(@Param(value = "id") Integer id);
 }
