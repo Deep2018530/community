@@ -79,4 +79,22 @@ public class QuestionService {
         questionDto.setUser(user);
         return questionDto;
     }
+
+    /**
+     * @description 发布问题的时候判断是 新增还是修改
+     * @author DeepSleeping
+     * @date 2019/6/19 15:04
+     */
+    public void createOrUpdate(Question question) {
+        if (ObjectUtils.isEmpty(question.getId())) {
+            //创建
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.create(question);
+        } else {
+            //更新
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.update(question);
+        }
+    }
 }
