@@ -20,7 +20,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(sessionInterception).addPathPatterns("/**");
+        String[]  excludes = new String[]{"/","/static/**","classpath:mapper/*.xml"};
+        registry.addInterceptor(sessionInterception).addPathPatterns("/**").excludePathPatterns(excludes);
     }
 
     @Override

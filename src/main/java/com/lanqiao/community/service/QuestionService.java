@@ -4,8 +4,9 @@ import com.lanqiao.community.dto.QuestionDto;
 import com.lanqiao.community.mapper.QuestionMapper;
 import com.lanqiao.community.mapper.UserMapper;
 import com.lanqiao.community.model.Question;
+import com.lanqiao.community.model.QuestionExample;
 import com.lanqiao.community.model.User;
-import javafx.beans.property.Property;
+import com.lanqiao.community.model.UserExample;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class QuestionService {
      * @date 2019/6/17 10:12
      */
     public List<Question> listQuestion() {
-        List<Question> questions = questionMapper.list();
+        List<Question> questions = questionMapper.selectAllBySelective(null);
         return questions;
     }
 
@@ -48,7 +49,7 @@ public class QuestionService {
         for (Question question : questions) {
             QuestionDto questionDto = new QuestionDto();
             BeanUtils.copyProperties(question, questionDto);
-            User user = userMapper.findById(questionDto.getCreator());
+            User user = userMapper.findByAccountId(questionDto.getCreator().toString());
             questionDto.setUser(user);
             questionDtos.add(questionDto);
         }
@@ -61,7 +62,7 @@ public class QuestionService {
      * @date 2019/6/17 11:37
      */
     public List<Question> listQuestion(Integer id) {
-        List<Question> questions = questionMapper.listByUserId(id);
+        List<Question> questions = questionMapper.selectAllBySelective(id);
 
         return questions;
     }
@@ -72,11 +73,13 @@ public class QuestionService {
      * @date 2019/6/18 23:13
      */
     public QuestionDto getById(Integer id) {
-        Question question = questionMapper.getById(id);
+        Question question = questionMapper.selectByPrimaryKey(id);
         QuestionDto questionDto = new QuestionDto();
         BeanUtils.copyProperties(question, questionDto);
-        User user = userMapper.findById(questionDto.getCreator());
-        questionDto.setUser(user);
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andAccountIdEqualTo(questionDto.getCreator().toString());
+        List<User> users = userMapper.selectByExample(userExample);
+        questionDto.setUser(users.get(0));
         return questionDto;
     }
 
@@ -90,11 +93,11 @@ public class QuestionService {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.create(question);
+            questionMapper.insert(question);
         } else {
             //更新
-            question.setGmtModified(question.getGmtCreate());
-            questionMapper.update(question);
+            question.setGmtModified(System.currentTimeMillis());
+            questionMapper.updateByPrimaryKey(question);
         }
     }
 }

@@ -1,32 +1,34 @@
 package com.lanqiao.community.mapper;
 
-
 import com.lanqiao.community.model.User;
-import org.apache.ibatis.annotations.*;
+import com.lanqiao.community.model.UserExample;
 
-/**
- * @author DeepSleeping
- * @date 2019/6/12 10:33
- * @description
- */
-@Mapper
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 public interface UserMapper {
+    User findByAccountId(@Param("accountId") String accountId);
 
-    @Insert("insert into user_1(name,account_id,token,gmt_create,gmt_modified,avatar_url) values (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified},#{avatarUrl})")
-    void insert(User user);
+    long countByExample(UserExample example);
 
-    @Select("select * from user_1 where token = #{token}")
-    User findByToken(@Param("token") String token);
+    int deleteByExample(UserExample example);
 
-    @Select("select * from user_1 where account_id = #{accountId} limit 0,1")
-    User findById(@Param("accountId") Integer accountId);
+    int deleteByPrimaryKey(Integer id);
 
-    @Delete("delete from user_1 where account_id = #{accountId}")
-    void removeAll(User user);
+    int insert(User record);
 
-    @Select("select * from user_1 where account_id = #{accountId}")
-    User findByaccountId(@Param(value = "accountId") String accountId);
+    int insertSelective(User record);
 
-    @Update("update user_1 set name = #{name},token = #{token},gmt_modified = #{gmtModified},avatar_url = #{avatarUrl} where account_id = #{accountId}")
-    void update(User user);
+    List<User> selectByExample(UserExample example);
+
+    User selectByPrimaryKey(Integer id);
+
+    int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByExample(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByPrimaryKeySelective(User record);
+
+    int updateByPrimaryKey(User record);
 }
