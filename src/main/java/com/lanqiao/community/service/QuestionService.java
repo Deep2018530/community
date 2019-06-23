@@ -1,6 +1,8 @@
 package com.lanqiao.community.service;
 
 import com.lanqiao.community.dto.QuestionDto;
+import com.lanqiao.community.exception.CustomizeErrorCode;
+import com.lanqiao.community.exception.CustomizeException;
 import com.lanqiao.community.mapper.QuestionMapper;
 import com.lanqiao.community.mapper.UserMapper;
 import com.lanqiao.community.model.Question;
@@ -74,6 +76,9 @@ public class QuestionService {
      */
     public QuestionDto getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDto questionDto = new QuestionDto();
         BeanUtils.copyProperties(question, questionDto);
         UserExample userExample = new UserExample();
@@ -97,7 +102,10 @@ public class QuestionService {
         } else {
             //更新
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.updateByPrimaryKey(question);
+            int updated = questionMapper.updateByPrimaryKey(question);
+            if (updated != 1) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
