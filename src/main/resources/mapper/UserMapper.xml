@@ -72,11 +72,6 @@
   <sql id="Base_Column_List">
     ID, ACCOUNT_ID, NAME, TOKEN, GMT_CREATE, GMT_MODIFIED, BIO, avatar_url
   </sql>
-  <select id="findByAccountId" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List"></include>
-    from  user_1 where account_id = #{accountId}
-  </select>
   <select id="selectByExample" parameterType="com.lanqiao.community.model.UserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

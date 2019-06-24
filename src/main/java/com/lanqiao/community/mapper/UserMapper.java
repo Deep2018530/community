@@ -2,14 +2,10 @@ package com.lanqiao.community.mapper;
 
 import com.lanqiao.community.model.User;
 import com.lanqiao.community.model.UserExample;
-
 import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
-    User findByAccountId(@Param("accountId") String accountId);
-
     long countByExample(UserExample example);
 
     int deleteByExample(UserExample example);

@@ -1,7 +1,6 @@
 package com.lanqiao.community.controller;
 
 import com.lanqiao.community.dto.QuestionDto;
-import com.lanqiao.community.mapper.QuestionMapper;
 import com.lanqiao.community.model.Question;
 import com.lanqiao.community.model.User;
 import com.lanqiao.community.service.QuestionService;

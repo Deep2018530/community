@@ -2,7 +2,6 @@ package com.lanqiao.community.controller;
 
 import com.lanqiao.community.dto.AccessTokenDTO;
 import com.lanqiao.community.dto.GithubUser;
-import com.lanqiao.community.mapper.UserMapper;
 import com.lanqiao.community.model.User;
 import com.lanqiao.community.provider.GithubProvider;
 import com.lanqiao.community.service.UserService;

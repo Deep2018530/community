@@ -2,15 +2,10 @@ package com.lanqiao.community.mapper;
 
 import com.lanqiao.community.model.Question;
 import com.lanqiao.community.model.QuestionExample;
-
 import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
 
 public interface QuestionMapper {
-
-    List<Question> selectAllBySelective(Integer id);
-
     long countByExample(QuestionExample example);
 
     int deleteByExample(QuestionExample example);

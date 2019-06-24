@@ -1,6 +1,7 @@
 package com.lanqiao.community.controller;
 
 import com.lanqiao.community.dto.QuestionDto;
+import com.lanqiao.community.mapper.QuestionExtMapper;
 import com.lanqiao.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,10 +21,13 @@ public class QuestionController {
     QuestionService questionService;
 
 
+
     @GetMapping(value = "question/{id}")
     public String question(@PathVariable(name = "id") Integer id,
                            Model model) {
         QuestionDto questionDto = questionService.getById(id);
+        //累加阅读数
+        questionService.incView(id);
         model.addAttribute("question", questionDto);
         return "question";
     }

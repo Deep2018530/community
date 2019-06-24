@@ -3,6 +3,7 @@ package com.lanqiao.community.service;
 import com.lanqiao.community.dto.QuestionDto;
 import com.lanqiao.community.exception.CustomizeErrorCode;
 import com.lanqiao.community.exception.CustomizeException;
+import com.lanqiao.community.mapper.QuestionExtMapper;
 import com.lanqiao.community.mapper.QuestionMapper;
 import com.lanqiao.community.mapper.UserMapper;
 import com.lanqiao.community.model.Question;
@@ -31,13 +32,17 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
+
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
+
     /**
      * @description 获取所有帖子(因pagehelper的问题 ， 单独执行sql转换dto)
      * @author DeepSleeping
      * @date 2019/6/17 10:12
      */
     public List<Question> listQuestion() {
-        List<Question> questions = questionMapper.selectAllBySelective(null);
+        List<Question> questions = questionMapper.selectByExample(null);
         return questions;
     }
 
@@ -51,8 +56,10 @@ public class QuestionService {
         for (Question question : questions) {
             QuestionDto questionDto = new QuestionDto();
             BeanUtils.copyProperties(question, questionDto);
-            User user = userMapper.findByAccountId(questionDto.getCreator().toString());
-            questionDto.setUser(user);
+            UserExample example = new UserExample();
+            example.createCriteria().andAccountIdEqualTo(questionDto.getCreator().toString());
+            List<User> users = userMapper.selectByExample(example);
+            questionDto.setUser(users.get(0));
             questionDtos.add(questionDto);
         }
         return questionDtos;
@@ -64,7 +71,9 @@ public class QuestionService {
      * @date 2019/6/17 11:37
      */
     public List<Question> listQuestion(Integer id) {
-        List<Question> questions = questionMapper.selectAllBySelective(id);
+        QuestionExample example = new QuestionExample();
+        example.createCriteria().andIdEqualTo(id);
+        List<Question> questions = questionMapper.selectByExample(example);
 
         return questions;
     }
@@ -96,16 +105,32 @@ public class QuestionService {
     public void createOrUpdate(Question question) {
         if (ObjectUtils.isEmpty(question.getId())) {
             //创建
+            question.setViewCount(0);
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
             questionMapper.insert(question);
         } else {
             //更新
             question.setGmtModified(System.currentTimeMillis());
-            int updated = questionMapper.updateByPrimaryKey(question);
+            QuestionExample questionExample = new QuestionExample();
+            questionExample.createCriteria().andIdEqualTo(question.getId());
+            int updated = questionMapper.updateByExampleSelective(question, questionExample);
             if (updated != 1) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    /**
+     * @description 累加阅读数
+     * @author DeepSleeping
+     * @date 2019/6/24 10:33
+     */
+    public void incView(Integer id) {
+        Question question = new Question();
+        question.setId(id);
+        //sql语句是view_count+ 1（viewCount）
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }
