@@ -10,6 +10,18 @@ public enum CommentTypeEnum {
     COMMENT(2);
     private Integer type;
 
+    /**
+     * create by zhangdingping on 2019/8/4 16:26
+     */
+    public static boolean isExist(Integer type) {
+        for (CommentTypeEnum value : CommentTypeEnum.values()) {
+            if (value.getType().equals(type)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Integer getType() {
         return type;
     }

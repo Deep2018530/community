@@ -2,6 +2,7 @@ package com.lanqiao.community.controller;
 
 import com.lanqiao.community.dto.CommentDTO;
 import com.lanqiao.community.dto.ResponseResultDto;
+import com.lanqiao.community.exception.CustomizeErrorCode;
 import com.lanqiao.community.mapper.CommentMapper;
 import com.lanqiao.community.model.Comment;
 import com.lanqiao.community.service.CommentService;
@@ -26,7 +27,6 @@ import java.util.Map;
 public class CommentController {
 
 
-
     @Autowired
     private CommentService commentService;
 
@@ -38,10 +38,8 @@ public class CommentController {
         Object githubUser = request.getSession().getAttribute("githubUser");
 
         if (githubUser == null) {
-            return ResponseResultDto.errorOf(2002, "未登录不能进行评论，请先登录！");
+            return ResponseResultDto.errorOf(CustomizeErrorCode.NO_LOGIN);
         }
-
-
         Comment comment = new Comment();
         BeanUtils.copyProperties(commentDTO, comment);
         comment.setGmtModified(System.currentTimeMillis());
@@ -49,8 +47,6 @@ public class CommentController {
         comment.setCommentator(1);
         comment.setLikeCount(0L);
         commentService.insert(comment);
-        Map<Object, Object> objectObjectMap = new HashMap<>();
-        objectObjectMap.put("message", "成功");
-        return objectObjectMap;
+        return ResponseResultDto.okOf();
     }
 }

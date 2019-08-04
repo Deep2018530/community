@@ -23,4 +23,8 @@ public class CustomizeException extends RuntimeException {
     public String getMessage() {
         return message;
     }
+
+    public Integer getCode() {
+        return code;
+    }
 }

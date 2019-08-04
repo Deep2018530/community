@@ -1,5 +1,7 @@
 package com.lanqiao.community.dto;
 
+import com.lanqiao.community.exception.CustomizeErrorCode;
+import com.lanqiao.community.exception.CustomizeException;
 import lombok.Data;
 
 /**
@@ -19,4 +21,24 @@ public class ResponseResultDto {
         resultDto.setMessage(message);
         return resultDto;
     }
+
+    public static ResponseResultDto errorOf(CustomizeErrorCode errorCode) {
+        return errorOf(errorCode.getCode(), errorCode.getMessage());
+    }
+
+    /**
+     * create by zhangdingping on 2019/8/4 16:10
+     */
+    public static ResponseResultDto errorOf(CustomizeException ex) {
+        return ResponseResultDto.errorOf(ex.getCode(), ex.getMessage());
+    }
+
+    public static ResponseResultDto okOf() {
+        ResponseResultDto resultDto = new ResponseResultDto();
+        resultDto.setCode(200);
+        resultDto.setMessage("请求成功");
+        return resultDto;
+    }
+
+
 }
